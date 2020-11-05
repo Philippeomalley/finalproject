@@ -1,0 +1,111 @@
+:root {
+  --primaryColor: white;
+  --primaryFont: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  --titleFont: "Futura", sans-serif;; 
+  --main-padding: 15%;
+}
+
+body {
+  font-family: var(--primaryFont);
+  font-size: 16px;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--primaryColor);
+  padding: 0;
+  margin: 0;
+
+}
+
+
+
+/* ---------NAVBAR--------- */
+.navbar {
+display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    position: relative;
+    height: 60px;
+    padding-left: 22px;
+    padding-right: 22px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+    z-index: 4;
+}
+.homeLogo {
+text-decoration: none;
+    color: rgb(61, 199, 149);
+    fill: rgb(61, 199, 149);
+    font-weight: 500;
+    font-size: 24px;
+    transition: color 0.2s ease 0s, fill 0.2s ease 0s, background 0.2s ease 0s;
+    cursor: pointer;
+}
+.navOptions {
+    display: flex;
+    flex: 1 1 auto;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-left: 50px;
+    align-self: stretch;
+     padding-left: 22px;
+    padding-right: 22px;
+}
+.navbar {
+display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    position: relative;
+    height: 60px;
+    padding-left: 22px;
+    padding-right: 16px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+    z-index: 4;
+}
+
+.home {
+padding-left: 22px;
+padding-right: 22px;
+}
+
+
+.myRecipes {
+padding-left: 22px;
+padding-right: 22px;
+}
+
+.mainContent{
+width:100vw;
+height:100vh;
+   background-image: url('masala.jpg');
+
+}
+
+.window{
+  position: fixed;
+  width: 800px;
+  height: 700px;
+ top:120px;
+ left: 200px;
+background-color: white;
+transform: translateX(1000%);
+box-shadow: rgba(0, 0, 0, 0.1) 5px 5px 5px 5px;
+}
+.showWindow {
+  transform: translateX(0);
+}
+
+.getRecipe{
+  position: fixed;
+ top: 50%;
+ left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+
+
+}
