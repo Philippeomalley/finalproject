@@ -5,4 +5,4 @@ from django.http import HttpResponse
 
 
 def home_view(request, *args, **kwargs):
-    return render(request, "nav.html", {})
+    return render(request, "home.html", {})

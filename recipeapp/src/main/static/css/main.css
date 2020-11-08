@@ -77,7 +77,7 @@ padding-right: 22px;
 .mainContent{
 width:100vw;
 height:100vh;
-   background-image: url('masala.jpg');
+   background-image: url("/static/images/masala.jpg");
 
 }
 
