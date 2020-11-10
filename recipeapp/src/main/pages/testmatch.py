@@ -1,4 +1,5 @@
 from productitem.models import Item
+from recipes.models import Recipe, Ingredient
 
 
 testArray = ["1 onion", "1 red pepper", "2 garlic cloves", "1 Tbsp oil", "1 heaped tsp hot chilli powder", "1 tsp paprika", "1 tsp ground cumin", "500g lean minced beef",
@@ -6,6 +7,8 @@ testArray = ["1 onion", "1 red pepper", "2 garlic cloves", "1 Tbsp oil", "1 heap
 
 
 def test_function():
+
+    for
 
     for item in Item.objects.all():
         print(item.product_name)

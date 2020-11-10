@@ -8,6 +8,9 @@
 from productitem.models import Item
 from itemadapter import ItemAdapter
 
+# crawling pipeline serves to take scrapy return values and set them to the productitem django model
+# can also be used for data preprocessing
+
 
 class CrawlingPipeline(object):
     def process_item(self, item, spider):
