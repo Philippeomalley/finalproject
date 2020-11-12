@@ -1,9 +1,11 @@
 import spacy
 import nltk
 import json
+import string
 from fuzzywuzzy import fuzz
 from productitem.models import Item
 from recipes.models import Recipe, Ingredient
+import re
 
 
 testArray = ["1 onion", "1 red pepper", "2 garlic cloves", "1 Tbsp oil", "1 heaped tsp hot chilli powder", "1 tsp paprika", "1 tsp ground cumin", "500g lean minced beef",
@@ -12,28 +14,46 @@ testArray = ["1 onion", "1 red pepper", "2 garlic cloves", "1 Tbsp oil", "1 heap
 
 def test_function():
 
-    i = 0
+    # i = 0
     testList = []
     for recipe in Recipe.objects.all():
+        recipe.price = 0
         for ingredient in recipe.ingredients.all():
             for product in Item.objects.all():
                 testDict = {}
                 testDict['ingredient_name'] = ingredient.ingredient_name
-                testDict['product_name'] = remove_ne(product.product_name)
+                testDict['product_name'] = product.product_name
                 testDict['ratio'] = fuzz.ratio(
-                    ingredient.ingredient_name, product.product_name)
-        testList.append(testDict)
-        testList.sort(key=lambda x: x['ratio'])
-        i += 1
-        with open('items' + str(i) + '.json', 'w') as outfile:
-            json.dump(testList, outfile)
-        testList = []
-        print(i)
+                    clean_data(ingredient.ingredient_name), clean_data(product.product_name))
+                testList.append(testDict)
+
+            testList.sort(key=lambda x: x['ratio'], reverse=True)
+            temp_product = Item.objects.get(
+                product_name=testList[0]['product_name'])
+
+            ingredient.equivalent_product.add(temp_product)
+            ingredient.save()
+            # recipe.price += temp_product.product_price
+            testList = []
+            # print(recipe.price)
+            # recipe.save()
+        # i += 1
+        # with open('items' + str(i) + '.json', 'w') as outfile:
+        #     json.dump(testList, outfile)
 
 
 def print_top10(list):
-    for item in list[-10:]:
+    for item in list:
         print(item)
+
+
+def clean_data(text):
+    text = text.lower()
+    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+    text = re.sub('sainsburys', '', text)
+    text = re.sub('\[.*?\]', '', text)
+    text = re.sub('\d+', '', text)
+    return text
 
 
 def remove_ne(string):
