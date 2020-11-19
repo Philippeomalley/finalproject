@@ -30,7 +30,6 @@ def test_function():
             testList.sort(key=lambda x: x['ratio'], reverse=True)
             temp_product = Item.objects.get(
                 product_name=testList[0]['product_name'])
-
             ingredient.equivalent_product.add(temp_product)
             ingredient.save()
             # recipe.price += temp_product.product_price
