@@ -1,5 +1,7 @@
 import scrapy
 import json
+import re
+from scraper.scraper.items import Recipe, RecipeCategory, Ingredient
 # from scrapy.spiders import CrawlSpider
 
 
@@ -12,17 +14,22 @@ class RecipeItem(scrapy.Item):
     image = scrapy.Field()
     category = scrapy.Field()
     numRatings = scrapy.Field()
+    numServings = scrapy.Field()
 
 
 class BBCGoodFoodSpider(scrapy.Spider):
     handle_httpstatus_list = [404]
     name = "bbcgoodfood"
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'scraper.scraper.pipelines.CategoryPipeline': 400
+        }}
 
     BASE_URL = 'https://www.bbcgoodfood.com'
 
     start_urls = [
         "https://www.bbcgoodfood.com/search/recipes/page/%s" %
-        page for page in range(1, 417)
+        page for page in range(1, 2)
     ]
 
     def parse(self, response):
@@ -47,6 +54,8 @@ class BBCGoodFoodSpider(scrapy.Spider):
         recipe["link"] = response.request.url
         recipe["image"] = recipe_data["image"]["url"]
         recipe["category"] = recipe_data["recipeCategory"]
+        recipe["numServings"] = recipe_data["recipeYield"]
+        recipe["ingredients"] = recipe_data["recipeIngredient"]
 
         ratingExist = response.css(
             '.recipe-template script::text').get() or False

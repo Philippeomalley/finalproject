@@ -20,16 +20,17 @@ BOT_NAME = 'scraper'
 SPIDER_MODULES = ['scraper.scraper.spiders']
 NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 
-ITEM_PIPELINES = {
-    'scraper.scraper.pipelines.CrawlingPipeline': 400,
-}
+# ITEM_PIPELINES = {
+#     'scraper.scraper.pipelines.SainsburysPipeline': 400,
+#     'scraper.scraper.pipelines.CategoryPipeline': 300,
+# }
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
