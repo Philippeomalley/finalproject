@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+import re
 from productitem.models import Item
 from recipes.models import Recipe, RecipeCategory, Ingredient
 from itemadapter import ItemAdapter
@@ -25,23 +26,61 @@ class SainsburysPipeline(object):
 
 class CategoryPipeline(object):
     def process_item(self, item, spider):
-        category = RecipeCategory()
-        category.category_name = item['category']
-        category.save()
+        for category in item['categories']:
+            # get or create method: check django db if it exists and if not create it. created is set to true or False
+            category_object, created = RecipeCategory.objects.get_or_create(
+                category_name=category)
         return item
 
-    # def process_item(self, item, spider):
 
-    #     Ingredient.objects.create(
-    #         ingredient_name=item['product_name'],
-    #         product_price=item['product_price'])
+class IngredientPipeline(object):
+    def process_item(self, item, spider):
+        for ingredient in item['ingredients']:
+            # ingredient = re.sub(r'(?<=[.,])(?=[^\s])', r' ', ingredient)
+            ingredient_object, created = Ingredient.objects.get_or_create(
+                ingredient_name=ingredient)
+        return item
 
-    #     return item
 
-    # def process_item(self, item, spider):
+class RecipePipeline(object):
+    def process_item(self, item, spider):
+        # if Recipe.objects.filter(item['link']).exists():
+        #     return item
+        # else:
+        recipe = Recipe()
+        print('here')
+        recipe.recipe_name = item['title']
+        recipe.recipe_link = item['link']
+        recipe.recipe_rating = item['rating']
+        recipe.recipe_numRatings = item['numRatings']
+        recipe.recipe_image = item['image']
+        recipe.save()
+        # recipe.recipe_NumServings = item['numServings']
+        for ingredient in item['ingredients']:
+            temp_ingredient = Ingredient.objects.get(
+                ingredient_name=ingredient)
+            recipe.ingredients.add(temp_ingredient)
+        for category in item['categories']:
+            temp_category = RecipeCategory.objects.get(
+                category_name=category)
+            recipe.recipe_category.add(temp_category)
 
-    #     Item.objects.create(
-    #         product_name=item['product_name'],
-    #         product_price=item['product_price'])
+        recipe.save()
 
-    #     return item
+        return item
+
+# def process_item(self, item, spider):
+
+#     Ingredient.objects.create(
+#         ingredient_name=item['product_name'],
+#         product_price=item['product_price'])
+
+#     return item
+
+# def process_item(self, item, spider):
+
+#     Item.objects.create(
+#         product_name=item['product_name'],
+#         product_price=item['product_price'])
+
+#     return item

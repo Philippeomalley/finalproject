@@ -12,9 +12,9 @@ class RecipeItem(scrapy.Item):
     rating = scrapy.Field()
     ingredients = scrapy.Field()
     image = scrapy.Field()
-    category = scrapy.Field()
+    categories = scrapy.Field()
     numRatings = scrapy.Field()
-    numServings = scrapy.Field()
+    # numServings = scrapy.Field()
 
 
 class BBCGoodFoodSpider(scrapy.Spider):
@@ -22,13 +22,15 @@ class BBCGoodFoodSpider(scrapy.Spider):
     name = "bbcgoodfood"
     custom_settings = {
         'ITEM_PIPELINES': {
-            'scraper.scraper.pipelines.CategoryPipeline': 400
+            'scraper.scraper.pipelines.CategoryPipeline': 400,
+            'scraper.scraper.pipelines.IngredientPipeline': 400,
+            'scraper.scraper.pipelines.RecipePipeline': 500
         }}
 
     BASE_URL = 'https://www.bbcgoodfood.com'
 
     start_urls = [
-        "https://www.bbcgoodfood.com/search/recipes/page/%s" %
+        "https://www.bbcgoodfood.com/search/recipes/page/%s/?sort=-popular" %
         page for page in range(1, 2)
     ]
 
@@ -53,10 +55,16 @@ class BBCGoodFoodSpider(scrapy.Spider):
         recipe["title"] = recipe_data["name"]
         recipe["link"] = response.request.url
         recipe["image"] = recipe_data["image"]["url"]
-        recipe["category"] = recipe_data["recipeCategory"]
-        recipe["numServings"] = recipe_data["recipeYield"]
-        recipe["ingredients"] = recipe_data["recipeIngredient"]
-
+        recipe["categories"] = recipe_data["recipeCategory"].split(", ")
+        # print(recipe_data)
+        # print(recipe_data["recipeYield"])
+        # recipe["numServings"] = re.match(
+        #     r'^([\d]+)', recipe_data["recipeYield"])
+        recipe["ingredients"] = []
+        for ingredient in recipe_data["recipeIngredient"]:
+            ingredient = re.sub(r'(?<=[.,])(?=[^\s])', r' ', ingredient)
+            recipe["ingredients"].append(ingredient)
+        # recipe["ingredients"] = recipe_data["recipeIngredient"]
         ratingExist = response.css(
             '.recipe-template script::text').get() or False
         print(ratingExist)

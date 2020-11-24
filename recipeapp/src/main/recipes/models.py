@@ -15,16 +15,17 @@ class Ingredient(models.Model):
 
 
 class RecipeCategory(models.Model):
-    category_name = models.CharField(max_length=255)
+    category_name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.category_name
 
 
 class Recipe(models.Model):
-    recipe_name = models.CharField(max_length=255, unique=True)
-    recipe_total = models.DecimalField(max_digits=20, decimal_places=10)
-    recipe_link = models.CharField(max_length=255)
+    recipe_name = models.CharField(max_length=255)
+    # recipe_total = models.DecimalField(
+    #     max_digits=20, decimal_places=10, blank=True)
+    recipe_link = models.CharField(max_length=255, unique=True)
     recipe_rating = models.CharField(max_length=255)
     recipe_numRatings = models.IntegerField()
     recipe_image = models.CharField(max_length=255)
