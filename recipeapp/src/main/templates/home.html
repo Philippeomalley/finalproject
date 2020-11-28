@@ -10,19 +10,7 @@
 </head>
 
 <body>
- {%block content%}
-
- {% endblock %}
- <nav class=" navbar">
-  <div class="homeLogo">Grocerr</div>
-  <div class="navOptions">
-   <div class="home">
-    Home
-   </div>
-   <div class="myRecipes">My Recipes</div>
-  </div>
-  <div class="account">Account</div>
- </nav>
+ {%include 'nav.html'%}
 
  <div class="getRecipe">
   <form method="post">
@@ -33,14 +21,14 @@
   </form>
  </div>
 
+
  <div class="mainContent">
-  <div class="window">
-   <div id="recipeName"></div>
-   <div id="recipeCost"></div>
-   <div id="recipeRating"></div>
-   <div id="recipeIngredients">Ingredients:</div>
-  </div>
+
+  {% block 'recipeDisplayWindow' %}
+  {% endblock %}
+
  </div>
+
 
 
  <footer class="footer">

@@ -10,6 +10,10 @@ def home_view(request, *args, **kwargs):
         # import function to run
         from pages.testmatch import test_function
     # call function
-        test_function()
+        # test_function()
     # return user to required page
     return render(request, "home.html", {})
+
+
+def recipe_gen_view(request, *args, **kwargs):
+    return render(request, "recipe.html", {})

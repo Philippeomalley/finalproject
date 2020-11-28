@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from pages.views import home_view
+from pages.views import home_view, recipe_gen_view
 
 # at this url tell which view you want to use
 # you can also link to another "app" urls
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home')
+    path('', home_view, name='home'),
+    path('recipegen/', recipe_gen_view, name='recipe_gen')
 ]
