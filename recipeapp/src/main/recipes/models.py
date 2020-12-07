@@ -23,14 +23,19 @@ class RecipeCategory(models.Model):
 
 class Recipe(models.Model):
     recipe_name = models.CharField(max_length=255)
-    # recipe_total = models.DecimalField(
-    #     max_digits=20, decimal_places=10, blank=True)
+    recipe_total = models.DecimalField(
+        max_digits=20, decimal_places=10, default=0)
     recipe_link = models.CharField(max_length=255, unique=True)
-    recipe_rating = models.CharField(max_length=255)
+    recipe_rating = models.DecimalField(
+        max_digits=20, decimal_places=10, default=0)
     recipe_numRatings = models.IntegerField()
     recipe_image = models.CharField(max_length=255)
     recipe_category = models.ManyToManyField(RecipeCategory)
-    recipe_NumServings = models.CharField(max_length=255, blank=True)
+    recipe_NumServings = models.IntegerField()
+    cost_per_serving = models.DecimalField(
+        max_digits=20, decimal_places=10, default=0)
+    sort_coefficient = models.DecimalField(
+        max_digits=20, decimal_places=10, default=0)
     # the django manyToMany model automatically creates
     # third table that ties recipe and ingredients table together
     ingredients = models.ManyToManyField(Ingredient)

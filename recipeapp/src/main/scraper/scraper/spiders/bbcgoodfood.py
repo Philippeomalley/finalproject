@@ -14,7 +14,7 @@ class RecipeItem(scrapy.Item):
     image = scrapy.Field()
     categories = scrapy.Field()
     numRatings = scrapy.Field()
-    # numServings = scrapy.Field()
+    numServings = scrapy.Field()
 
 
 class BBCGoodFoodSpider(scrapy.Spider):
@@ -31,7 +31,7 @@ class BBCGoodFoodSpider(scrapy.Spider):
 
     start_urls = [
         "https://www.bbcgoodfood.com/search/recipes/page/%s/?sort=-popular" %
-        page for page in range(1, 2)
+        page for page in range(1, 40)
     ]
 
     def parse(self, response):
@@ -56,15 +56,14 @@ class BBCGoodFoodSpider(scrapy.Spider):
         recipe["link"] = response.request.url
         recipe["image"] = recipe_data["image"]["url"]
         recipe["categories"] = recipe_data["recipeCategory"].split(", ")
-        # print(recipe_data)
-        # print(recipe_data["recipeYield"])
-        # recipe["numServings"] = re.match(
-        #     r'^([\d]+)', recipe_data["recipeYield"])
+
+        recipe["numServings"] = re.search(
+            r'\d+',  str(recipe_data["recipeYield"])).group()
         recipe["ingredients"] = []
         for ingredient in recipe_data["recipeIngredient"]:
             ingredient = re.sub(r'(?<=[.,])(?=[^\s])', r' ', ingredient)
             recipe["ingredients"].append(ingredient)
-        # recipe["ingredients"] = recipe_data["recipeIngredient"]
+
         ratingExist = response.css(
             '.recipe-template script::text').get() or False
         print(ratingExist)

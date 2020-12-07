@@ -3,7 +3,48 @@
 
 
 {%block 'recipeDisplayWindow'%}
+
+
 <div class="recipeDisplayWindow">
- <H1></H1>
-</div>
-{% endblock %}
+ <div class="headerContainer">
+  <div class="recipeHeader">
+   <div class="recipeImage"></div>
+   <div class="recipeInfo">
+    <div class="recipeName"></div>
+    <div class="recipeRating"></div>
+    <div class="recipeCPS"></div>
+    <div class="numServings"></div>
+    <div class="numRatings"></div>
+   </div>
+   <div class="iteratorButtonContainer">
+    <button class="prevRecipe">Previous Recipe</button>
+    <button class="nextRecipe">Get Another Recipe</button>
+   </div>
+  </div>
+
+  <div class="recipeBody">
+   <div class="ingredientContainer">
+    <div class="ingredients">
+     <h3>Ingredients</h3>
+     <div class="recipeIngredients"></div>
+    </div>
+    <div class="items">
+     <h3>Sainsbury's equivalent</h3>
+     <div class="equivalentItems"></div>
+    </div>
+   </div>
+   <hr style="color:black">
+  </div>
+  <div class="add2cart">
+   <h2 class="total">Trolley Total: </h2>
+
+   <div class="recipeTotal"></div>
+   <button class="add2cartBtn">
+    Add to cart
+   </button>
+  </div>
+
+
+
+ </div>
+ {% endblock %}

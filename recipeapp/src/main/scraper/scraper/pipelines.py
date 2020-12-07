@@ -3,7 +3,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-
+import decimal
 # useful for handling different item types with a single interface
 import re
 from productitem.models import Item
@@ -17,9 +17,11 @@ from itemadapter import ItemAdapter
 class SainsburysPipeline(object):
     def process_item(self, item, spider):
 
+        # if "p" in item['product_price']:
+        #     clean_price = 0
         Item.objects.create(
             product_name=item['product_name'],
-            product_price=item['product_price'])
+            product_price=clean_price(item['product_price']))
 
         return item
 
@@ -54,8 +56,9 @@ class RecipePipeline(object):
         recipe.recipe_rating = item['rating']
         recipe.recipe_numRatings = item['numRatings']
         recipe.recipe_image = item['image']
+        recipe.recipe_NumServings = item['numServings']
         recipe.save()
-        # recipe.recipe_NumServings = item['numServings']
+
         for ingredient in item['ingredients']:
             temp_ingredient = Ingredient.objects.get(
                 ingredient_name=ingredient)
@@ -84,3 +87,13 @@ class RecipePipeline(object):
 #         product_price=item['product_price'])
 
 #     return item
+
+
+def clean_price(price):
+    if "p" in price:
+        price = re.sub('p', '', price)
+        price = decimal.Decimal(price) / 100
+    elif "£" in price:
+        price = re.sub('£', '', price)
+        price = decimal.Decimal(price)
+    return price
