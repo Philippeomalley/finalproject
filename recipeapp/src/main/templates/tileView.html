@@ -1,0 +1,28 @@
+{%extends 'base.html' %}
+
+
+{%block content%}
+<div class="recipe-list-container">
+ <div class="recipe-list">
+  {%for recipe in context.ordered_recipe_list%}
+  <div class="recipe-card">
+
+   <a href="../recipe/{{recipe.pk}}">
+
+    <div class="img-container">
+     <img class="recipe-image" src="{{recipe.recipe_image}}">
+    </div>
+    <div class="card-content">
+     <div class="card-title">{{recipe.recipe_name}}</div>
+     <div class="card-cps"></div>{{recipe.cost_per_serving}}</h5>
+     <div class="card-discount"></div>{{recipe.discount_total}}</h5>
+     <div class="card-rating">{{recipe.recipe_rating}}</div>
+    </div>
+   </a>
+  </div>
+  {%endfor%}
+
+
+ </div>
+</div>
+{%endblock%}

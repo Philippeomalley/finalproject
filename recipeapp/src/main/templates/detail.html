@@ -1,0 +1,87 @@
+{%extends "base.html"%}
+{%load static%}
+
+
+{%block content%}
+<div class="background-image">
+ <div class="main-content">
+  <div class="recipe-display-window mb-5">
+   <div class="header-container">
+    <div class="recipe-header">
+     <div class="recipe-image"><img class="recipe-image" src="{{recipe.recipe_image}}"></div>
+     <div class="recipe-info">
+      <div class="recipe-name">
+       <h2>{{recipe.recipe_name}}</h2>
+      </div>
+      <div class="recipe-sub-info"></div>
+      <div class="recipe-rating">
+       Rating : {{recipe.recipe_rating|floatformat}}/5
+      </div>
+      <div class="recipe-cps">
+       Cost per serving : £{{recipe.cost_per_serving|floatformat:2}}
+      </div>
+      <div class="num-servings">
+       Serves {{recipe.recipe_NumServings}}
+      </div>
+      <div class="num-ratings">Number of ratings: {{recipe.recipe_numRatings}}</div>
+      <div class="">
+       Find the full recipe at <a href="{{recipe.recipe_link}}"> <u>bbcgoodfood.com</u> </a>
+      </div>
+     </div>
+     <div class="iteratorButtonContainer">
+      <form method="POST" action="">
+       {%csrf_token%}
+       <input type="submit" value="Save Recipe" class="btn btn-success">
+      </form>
+     </div>
+    </div>
+   </div>
+
+   <div class="recipe-body">
+    <div class="ingredient-container">
+     <table>
+      <th>
+       Ingredients
+      </th>
+      <th>
+       Sainsbury's equivalent
+      </th>
+      <th>
+       Cost
+      </th>
+
+
+      {%for ingredient in recipe.ingredients.all%}
+      <tr>
+       <td>{{ingredient.ingredient_name}}</td>
+       <td>{{ingredient.equivalent_product.all.0}}</td>
+       <td>£{{ingredient.equivalent_product.all.0.product_price|floatformat:2}}</td>
+       <!-- {%if ingredient.equivalent_product.all.0.product_discount%} -->
+       <td style="color:red; width:2%; padding:2%">
+        -£{{ingredient.equivalent_product.all.0.product_discount|floatformat:2}}</td>
+       <!-- {%endif%} -->
+      </tr>
+      {%endfor%}
+     </table>
+
+
+    </div>
+    <hr style="color:black">
+   </div>
+   <div class="add2cart">
+
+    <div class="recipeTotal"></div>
+    <a href="https://www.sainsburys.co.uk">
+     <button class=" sainsburys">
+      Purchase at Sainsburys
+     </button>
+    </a>
+
+   </div>
+  </div>
+
+
+ </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{%extends 'base.html' %}
+
+
+{%block content%}
+
+<div class="background-image">
+  <div class="main-content">
+    <div class="recipe-list-container">
+      <div class="recipe-list">
+        {%for recipe in context.ordered_recipe_list%}
+        <div class="recipe-card">
+
+
+          <a href="../recipe/{{recipe.pk}}">
+
+            <div class="img-container">
+              <img class="recipe-image" src="{{recipe.recipe_image}}">
+            </div>
+            <div class="card-content">
+              <div class="card-title"><b>{{recipe.recipe_name}}</b></div>
+              <div class="card-cps"></div>Cost Per Serving: £{{recipe.cost_per_serving|floatformat}}</h5>
+              <div class="card-discount"></div>Discount Total: £{{recipe.discount_total|floatformat}}</h5>
+              <div class="card-rating">Rating {{recipe.recipe_rating|floatformat}}/5</div>
+
+            </div>
+
+          </a>
+        </div>
+        {%endfor%}
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

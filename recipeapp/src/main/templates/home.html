@@ -1,43 +1,104 @@
-{% load static %}
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+{%extends 'base.html' %}
 
-<head>
- <title>Grocerr</title>
- <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}" />
+{% block content %}
+<div class="main-content">
+ <div class="selection-window">
+  <div class="card mt-5">
 
-</head>
+   <div class="card-body mx-4">
 
-<body>
- {%include 'nav.html'%}
+    <!--Header-->
+    <div class="text-center">
+     <h3 class="dark-grey-text mb-5"><strong>Find new recipes</strong></h3>
+     <div class="modal-footer mb-3 "></div>
 
- <div class=" getRecipe">
+
+     <form method="get" action="">
+
+      <div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" id="breakfast" value="Breakfast">
+        <label class="form-check-label">
+         Breakfast
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" id="main-course" value="Main course">
+        <label class="form-check-label">
+         Main Course
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" id="snack" value="Snack">
+        <label class="form-check-label">
+         Snack
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" id="dessert" value="Dessert">
+        <label class="form-check-label">
+         Dessert
+        </label>
+       </div>
+      </div>
+
+      <div class="modal-footer mb-3"></div>
+
+      <div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" value="vegetarian">
+        <label class="form-check-label">
+         Vegetarian
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" value="vegan">
+        <label class="form-check-label">
+         Vegan
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="categories" value="healthy">
+        <label class="form-check-label">
+         Healthy
+        </label>
+       </div>
+      </div>
+      <div class="modal-footer mb-3"></div>
+      <div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="optimisations" value="optimisation1">
+        <label class="form-check-label" for="price">
+         Price
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="optimisations" value="optimisation2">
+        <label class="form-check-label" for="dietrestrictions3">
+         Promotions
+        </label>
+       </div>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="optimisations" value="optimisation3">
+        <label class="form-check-label" for="dietrestrictions3">
+         Recipe Rating
+        </label>
+       </div>
+      </div>
+
+      <div class="modal-footer"></div>
+      <div class="text-center">
+       <input type="submit" class="btn btn-success mt-4" value="Get Recipes">
+      </div>
+    </div>
+    </form>
+   </div>
+
+
+  </div>
+
 
  </div>
 
-
- <div class="mainContent">
-
-  <a href="/recipegen/" class="getRecipe">
-   <!-- <button class="getRecipe" type="submit" name="run_script"> -->
-   Get Recipes
-   <!-- </button> -->
-  </a>
-
-  {% block 'recipeDisplayWindow' %}
-  {% endblock %}
-
- </div>
-
-
-
- <footer class="footer">
- </footer>
-
- <script> type = "text/javascript"
-  var recipeList = JSON.parse("{{recipe_list|escapejs}}");
- </script>
- <script src="{% static 'js/script.js' %}" defer></script>
-</body>
-
-</html>
+</div>
+{% endblock %}

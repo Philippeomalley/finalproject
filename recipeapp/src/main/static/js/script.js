@@ -11,7 +11,8 @@ const recipeTotal = document.querySelector(".recipeTotal")
 const numServings = document.querySelector(".numServings")
 const numRatings = document.querySelector(".numServings")
 // recipeImage.innerHTML = "hello"
-var i = 0;
+var i = Math.floor(Math.random() * recipeList.length / 5);
+console.log(recipeList.length)
 displayRecipe();
 
 // const window1 = document.querySelector(".window");

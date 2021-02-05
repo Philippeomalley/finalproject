@@ -13,14 +13,35 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import url, include
+
+# ... the rest of your URLconf goes here ...
+
+
 from django.contrib import admin
 from django.urls import path
-from pages.views import home_view, recipe_gen_view
+from pages.views import home_view, recipe_detail_view, register_view, catalogue_view, user_recipes_view
+from django.contrib.auth import views as auth_views
 
 # at this url tell which view you want to use
 # you can also link to another "app" urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
-    path('recipegen/', recipe_gen_view, name='recipe_gen')
+    path('catalogue/', catalogue_view, name='catalogue'),
+    path('recipe/<int:pk>', recipe_detail_view, name='recipe_detail'),
+    path('register/', register_view, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    path('myrecipes/', user_recipes_view, name='myrecipes')
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+
+# Add Django site authentication urls (for login, logout, password management)
+
+# urlpatterns += [
+#     path('accounts/', include('django.contrib.auth.urls')),
+# ]

@@ -27,7 +27,7 @@ SECRET_KEY = 's@=^*#qqq1l5hht4vn%b3d=gf5-+r90=_9(7rz)$9g^-xbgc98'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0','127.0.0.1','grocerrapp.herokuapp.com']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'pages',
     'recipes',
     'livereload',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -127,8 +128,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# STATIC_ROOT = [
+#     os.path.join(BASE_DIR, 'staticfiles')
+# ]
+
+# Redirect to home URL after user login (Default is /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

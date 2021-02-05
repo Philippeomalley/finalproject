@@ -22,41 +22,57 @@ class BBCGoodFoodSpider(scrapy.Spider):
     name = "bbcgoodfood"
     custom_settings = {
         'ITEM_PIPELINES': {
-            'scraper.scraper.pipelines.CategoryPipeline': 400,
-            'scraper.scraper.pipelines.IngredientPipeline': 400,
-            'scraper.scraper.pipelines.RecipePipeline': 500
+            'scraper.scraper.pipelines.CategoryPipeline': 100,
+            'scraper.scraper.pipelines.IngredientPipeline': 100,
+            'scraper.scraper.pipelines.RecipePipeline': 200
         }}
 
     BASE_URL = 'https://www.bbcgoodfood.com'
 
     start_urls = [
         "https://www.bbcgoodfood.com/search/recipes/page/%s/?sort=-popular" %
-        page for page in range(1, 40)
+        page for page in range(1, 2)
     ]
 
     def parse(self, response):
         links = response.css(
             '.standard-card-new__display-title a::attr(href)').extract()
+        # follow each link on the catalogue layout
         for link in links:
             url = self.BASE_URL + link
             yield scrapy.Request(url, callback=self.parse_recipe)
-        # next_page = response.css(
-        #     'a.pagination-arrow--next::attr(href)').get()
-        # if next_page is not None:
-        #     next_page = response.urljoin(next_page)
-        #     yield scrapy.Request(next_page, callback=self.parse)
 
     def parse_recipe(self, response):
-
-        recipe_data = json.loads(response.xpath(
-            '//script[@type="application/ld+json"]//text()').extract_first())
-
+        # extract the JSON schema from the script tag that contains it to access relevant data
+        data = response.xpath(
+            '//script[@type="application/ld+json"]//text()').extract_first()
+        recipe_data = json.loads(data)
         recipe = RecipeItem()
+
         recipe["title"] = recipe_data["name"]
         recipe["link"] = response.request.url
         recipe["image"] = recipe_data["image"]["url"]
         recipe["categories"] = recipe_data["recipeCategory"].split(", ")
 
+        # as these pieces of data aren't always in the same place, the whole schema is searched to find any instances
+        vegetarian_matches = ["vegetarian", "Vegetarian"]
+        vegan_matches = ["vegan", "Vegan"]
+        gluten_matches = ["gluten-free", "Gluten-free", "gluten free"]
+        healthy_matches = ["healthy", "Healthy"]
+
+        if any(x in data for x in vegetarian_matches):
+            recipe["categories"].append("vegetarian")
+
+        if any(x in data for x in vegan_matches):
+            recipe["categories"].append("vegan")
+
+        if any(x in data for x in gluten_matches):
+            recipe["categories"].append("gluten free")
+
+        if any(x in data for x in healthy_matches):
+            recipe["categories"].append("healthy")
+
+        # extract integer from num servings string
         recipe["numServings"] = re.search(
             r'\d+',  str(recipe_data["recipeYield"])).group()
         recipe["ingredients"] = []
@@ -65,8 +81,7 @@ class BBCGoodFoodSpider(scrapy.Spider):
             recipe["ingredients"].append(ingredient)
 
         ratingExist = response.css(
-            '.recipe-template script::text').get() or False
-        print(ratingExist)
+            '.post__header script::text').get() or False
         if(ratingExist != False):
             rating_data = json.loads(ratingExist)
             recipe["rating"] = rating_data["aggregateRating"]["ratingValue"]

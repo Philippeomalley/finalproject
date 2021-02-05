@@ -9,7 +9,19 @@
     Home
    </div>
   </a>
-  <div class="myRecipes">My Recipes</div>
+  {% if user.is_authenticated %}
+  <a href="{% url 'myrecipes' %}">
+   <div class="myRecipes">My Recipes</div>
+  </a>
+  {% endif %}
  </div>
- <div class="account">Account</div>
+
+ {% if user.is_authenticated %}
+ <a class="nav-item nav-link" href="#">{{user.username}}</a>
+ <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+ {% else %}
+ <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+ <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+ {% endif %}
+
 </nav>

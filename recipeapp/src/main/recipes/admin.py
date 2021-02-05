@@ -10,3 +10,4 @@ class ItemAdmin(admin.ModelAdmin):
 admin.site.register(Recipe, ItemAdmin)
 admin.site.register(Ingredient, ItemAdmin)
 admin.site.register(RecipeCategory, ItemAdmin)
+# admin.site.register(Diet, ItemAdmin)

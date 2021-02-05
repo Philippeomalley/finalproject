@@ -14,15 +14,24 @@ from itemadapter import ItemAdapter
 # can also be used for data preprocessing
 
 
+class DiscountsPipeline(object):
+    def process_item(self, item, spider):
+        discount_value = clean_discount(item['product_discount'])
+        cleaned_discount = clean_price(discount_value)
+        item_object = Item.objects.get_or_create(
+            product_name=item['product_name'])[0]
+        item_object.product_discount = cleaned_discount
+        item_object.save()
+        return item
+
+
 class SainsburysPipeline(object):
     def process_item(self, item, spider):
-
-        # if "p" in item['product_price']:
-        #     clean_price = 0
-        Item.objects.create(
-            product_name=item['product_name'],
-            product_price=clean_price(item['product_price']))
-
+        item_object = Item.objects.get_or_create(
+            product_name=item['product_name'])[0]
+        item_object.product_price = clean_price(item['product_price'])
+        item_object.product_photo = item['product_photo']
+        item_object.save()
         return item
 
 
@@ -38,7 +47,6 @@ class CategoryPipeline(object):
 class IngredientPipeline(object):
     def process_item(self, item, spider):
         for ingredient in item['ingredients']:
-            # ingredient = re.sub(r'(?<=[.,])(?=[^\s])', r' ', ingredient)
             ingredient_object, created = Ingredient.objects.get_or_create(
                 ingredient_name=ingredient)
         return item
@@ -46,11 +54,7 @@ class IngredientPipeline(object):
 
 class RecipePipeline(object):
     def process_item(self, item, spider):
-        # if Recipe.objects.filter(item['link']).exists():
-        #     return item
-        # else:
         recipe = Recipe()
-        print('here')
         recipe.recipe_name = item['title']
         recipe.recipe_link = item['link']
         recipe.recipe_rating = item['rating']
@@ -67,7 +71,6 @@ class RecipePipeline(object):
             temp_category = RecipeCategory.objects.get(
                 category_name=category)
             recipe.recipe_category.add(temp_category)
-
         recipe.save()
 
         return item
@@ -97,3 +100,15 @@ def clean_price(price):
         price = re.sub('£', '', price)
         price = decimal.Decimal(price)
     return price
+
+
+def clean_discount(discount):
+    discount = discount.lower()
+    if 'save' in discount:
+        discount = discount.split('save', maxsplit=1)[-1]\
+            .split(maxsplit=1)[0]
+    elif 'half price' in discount:
+        discount = discount.split('now', maxsplit=1)[-1]\
+            .split(maxsplit=1)[0]
+    discount = re.sub(':', '', discount)
+    return discount
